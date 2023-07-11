@@ -9,6 +9,7 @@ pipeline {
   environment {
     DOCKERHUB_CREDS = 'docker_credentials'
     DOCKER_IMAGE = 'mohammadrony/java-library-app'
+    REGISTRY = 'registry.hub.docker.com'
   }
   
   stages {
@@ -29,26 +30,28 @@ pipeline {
     stage('Building image') {
       steps {
         script {
-          app_image = docker.build(DOCKER_IMAGE)
+          app_image = docker.build("${REGISTRY}/${DOCKER_IMAGE}")
         }
       }
     }
     stage('Push Docker Image') {
       steps{
         script {
-          docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CREDS) {
+          docker.withRegistry("https://${REGISTRY}", DOCKERHUB_CREDS) {
             app_image.push("${BUILD_NUMBER}")
             app_image.push("latest")
           }
         }
       }
     }
+    
     stage('Remove Unused docker image') {
       steps{
-        sh "docker rmi ${DOCKER_IMAGE}:latest"
-        sh "docker rmi ${DOCKER_IMAGE}:${BUILD_NUMBER}"
+        sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:latest"
+        sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:${BUILD_NUMBER}"
       }
     }
+    
     stage("Deploy containers"){
       steps{
         script {
