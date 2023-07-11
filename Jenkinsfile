@@ -7,7 +7,7 @@ pipeline {
     maven "MAVEN_3"
   }
   environment {
-    registryCredential = ''
+    DOCKERHUB_CREDS = 'docker_credentials'
     DOCKER_IMAGE = 'mohammadrony/java-library-app'
   }
   
@@ -29,7 +29,6 @@ pipeline {
     stage('Building image') {
       steps {
         script {
-          // Build the Docker image
           app_image = docker.build(DOCKER_IMAGE)
         }
       }
@@ -37,8 +36,8 @@ pipeline {
     stage('Push Docker Image') {
       steps{
         script {
-          docker.withRegistry('https://registry.hub.docker.com', docker_credentials) {
-            app_image.push("${env.BUILD_NUMBER}")
+          docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CREDS) {
+            app_image.push("${BUILD_NUMBER}")
             app_image.push("latest")
           }
         }
@@ -47,16 +46,25 @@ pipeline {
     stage('Remove Unused docker image') {
       steps{
         sh "docker rmi ${DOCKER_IMAGE}:latest"
-        sh "docker rmi ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+        sh "docker rmi ${DOCKER_IMAGE}:${BUILD_NUMBER}"
       }
     }
-    // stage("Deploy container"){
-    //   steps{
-    //     script {
-    //       echo "Creating config map and secrets"
-    //       sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
-    //     }
-    //   }
-    // }
+    stage("Deploy containers"){
+      steps{
+        script {
+          echo "Creating config map and secrets"
+          sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
+
+          echo "Creating storage for mysql"
+          sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
+
+          echo "Creating mysql pod and service"
+          sh '/usr/local/bin/kubectl apply -f 3-mysql-pod-service.yml'
+
+          echo "Creating java app deployments"
+          sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
+        }
+      }
+    }
   }
 }

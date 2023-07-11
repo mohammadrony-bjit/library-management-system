@@ -1,0 +1,65 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: library-mysql-server
+  labels: 
+    app: library-mysql-server
+spec:
+  containers:
+    - name: library-mysql-server
+      image: mysql:latest
+      ports:
+        - containerPort: 3306
+      env:
+        - name: MYSQL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: library-mysql-config
+              key: MYSQL_HOST
+        - name: MYSQL_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: library-mysql-config
+              key: MYSQL_PORT
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: library-mysql-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: library-mysql-secret
+              key: MYSQL_PASSWORD
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: library-mysql-secret
+              key: MYSQL_ROOT_PASSWORD
+      volumeMounts:
+        - name: mysql-initdb
+          mountPath: /docker-entrypoint-initdb.d
+        - name: task-mysql-storage
+          mountPath: /var/lib/mysql
+          
+  volumes:
+    - name: library-mysql-storage
+      persistentVolumeClaim:
+        claimName: library-mysql-pvc
+    - name: mysql-initdb
+      configMap:
+        name: mysql-initdb-config
+        
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: library-mysql-service
+spec:
+  selector:
+    app: library-mysql-server
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
