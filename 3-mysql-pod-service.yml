@@ -12,26 +12,16 @@ spec:
       ports:
         - containerPort: 3306
       env:
-        - name: MYSQL_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: library-mysql-config
-              key: MYSQL_HOST
         - name: MYSQL_PORT
           valueFrom:
             configMapKeyRef:
               name: library-mysql-config
               key: MYSQL_PORT
-        - name: MYSQL_USER
+        - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
               name: library-mysql-config
-              key: MYSQL_USER
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: library-mysql-secret
-              key: MYSQL_PASSWORD
+              key: MYSQL_DATABASE
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:
             secretKeyRef:
@@ -56,7 +46,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: library-mysql-service
+  name: mysql-service
 spec:
   selector:
     app: library-mysql-server
