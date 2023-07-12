@@ -21,7 +21,7 @@
     "build-tools/",
     "includes/",
     "devnote*.*",
-    "index.html",
+    "/",
     "testing.html",
     "buildcustom.php",
     "package.json",
