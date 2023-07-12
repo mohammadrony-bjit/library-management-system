@@ -62,11 +62,11 @@ pipeline {
             echo 'Creating config map and secrets'
             sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
 
-            echo 'Creating storage for mysql'
-            sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
+            // echo 'Creating storage for mysql'
+            // sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
 
-            // echo 'Creating mysql pod and service'
-            // sh '/usr/local/bin/kubectl apply -f 3-mysql-pod-service.yml'
+            echo 'Creating mysql pod and service'
+            sh '/usr/local/bin/kubectl apply -f 3-mysql-pod-service.yml'
 
             sleep(60)
 
