@@ -15,7 +15,7 @@ spec:
       terminationGracePeriodSeconds: 60
       containers:
         - name: library-app-apache
-          image: "mohammadrony/java-library-app:${env.BUILD_NUMBER}"
+          image: "mohammadrony/java-library-app:${BUILD_NUMBER}"
           imagePullPolicy: "Always"
           ports:
             - containerPort: 8080
