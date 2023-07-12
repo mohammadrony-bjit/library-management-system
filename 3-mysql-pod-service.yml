@@ -39,16 +39,16 @@ spec:
       volumeMounts:
         - name: mysql-initdb
           mountPath: /docker-entrypoint-initdb.d
-        - name: library-mysql-storage
-          mountPath: /var/lib/mysql
+#         - name: library-mysql-storage
+#           mountPath: /var/lib/mysql
 
   volumes:
-    - name: library-mysql-storage
-      persistentVolumeClaim:
-        claimName: library-mysql-pvc
     - name: mysql-initdb
       configMap:
         name: mysql-initdb-config
+#     - name: library-mysql-storage
+#       persistentVolumeClaim:
+#         claimName: library-mysql-pvc
         
 
 ---
@@ -59,7 +59,15 @@ metadata:
 spec:
   selector:
     app: library-mysql-server
+  type: NodePort
   ports:
     - protocol: TCP
       port: 3306
       targetPort: 3306
+      nodePort: 30036
+
+#   ports:
+#     - protocol: TCP
+#       port: 3306
+#       targetPort: 3306
+
