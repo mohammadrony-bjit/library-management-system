@@ -12,11 +12,6 @@ spec:
       ports:
         - containerPort: 3306
       env:
-        - name: MYSQL_PORT
-          valueFrom:
-            configMapKeyRef:
-              name: library-mysql-config
-              key: MYSQL_PORT
         - name: MYSQL_USER
           valueFrom:
             configMapKeyRef:
