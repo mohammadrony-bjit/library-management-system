@@ -38,18 +38,18 @@ spec:
               name: library-mysql-secret
               key: MYSQL_ROOT_PASSWORD
       volumeMounts:
-        - name: mysql-initdb
-          mountPath: /docker-entrypoint-initdb.d
-        - name: library-mysql-storage
-          mountPath: /var/lib/mysql
+        # - name: library-mysql-storage
+        #   mountPath: /var/lib/mysql
+        # - name: mysql-initdb
+        #   mountPath: /docker-entrypoint-initdb.d
 
   volumes:
-    - name: library-mysql-storage
-      persistentVolumeClaim:
-        claimName: library-mysql-pvc
-    - name: mysql-initdb
-      configMap:
-        name: mysql-initdb-config
+    # - name: library-mysql-storage
+    #   persistentVolumeClaim:
+    #     claimName: library-mysql-pvc
+    # - name: mysql-initdb
+    #   configMap:
+    #     name: mysql-initdb-config
         
 
 ---

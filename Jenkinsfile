@@ -65,10 +65,11 @@ pipeline {
             echo 'Creating storage for mysql'
             sh '/usr/local/bin/kubectl apply -f 2-mysql-pv-pvc.yml'
 
-            echo 'Creating mysql pod and service'
-            sh '/usr/local/bin/kubectl apply -f 3-mysql-pod-service.yml'
+            // echo 'Creating mysql pod and service'
+            // sh '/usr/local/bin/kubectl apply -f 3-mysql-pod-service.yml'
 
-            sleep(30)
+            sleep(60)
+
             echo 'Creating java app deployments'
             sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
             sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
