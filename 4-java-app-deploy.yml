@@ -6,15 +6,15 @@ spec:
   replicas: 2
   selector:
     matchLabels:
-      app: library-app-apache
+      app: java-library-app
   template:
     metadata:
       labels:
-        app: library-app-apache
+        app: java-library-app
     spec:
       terminationGracePeriodSeconds: 60
       containers:
-        - name: library-app-apache
+        - name: java-library-app
           image: "mohammadrony/java-library-app:${BUILD_NUMBER}"
           imagePullPolicy: "Always"
           ports:
@@ -27,7 +27,7 @@ metadata:
   name: library-app-service
 spec:
   selector:
-    app: library-app-apache
+    app: java-library-app
   ports:
   - protocol: TCP
     port: 8080

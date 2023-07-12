@@ -8,6 +8,7 @@ spec:
   containers:
     - name: library-mysql-server
       image: mysql:latest
+      imagePullPolicy: "Always"
       ports:
         - containerPort: 3306
       env:
@@ -43,12 +44,12 @@ spec:
           mountPath: /var/lib/mysql
 
   volumes:
-    - name: mysql-initdb
-      configMap:
-        name: mysql-initdb-config
     - name: library-mysql-storage
       persistentVolumeClaim:
         claimName: library-mysql-pvc
+    - name: mysql-initdb
+      configMap:
+        name: mysql-initdb-config
         
 
 ---
@@ -59,15 +60,8 @@ metadata:
 spec:
   selector:
     app: library-mysql-server
-  type: NodePort
   ports:
     - protocol: TCP
       port: 3306
       targetPort: 3306
-      nodePort: 30306
-
-#   ports:
-#     - protocol: TCP
-#       port: 3306
-#       targetPort: 3306
-
+      
