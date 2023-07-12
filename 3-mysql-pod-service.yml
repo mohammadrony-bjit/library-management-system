@@ -17,6 +17,16 @@ spec:
             configMapKeyRef:
               name: library-mysql-config
               key: MYSQL_PORT
+        - name: MYSQL_USER
+          valueFrom:
+            configMapKeyRef:
+              name: library-mysql-config
+              key: MYSQL_USER
+        - name: MYSQL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: library-mysql-secret
+              key: MYSQL_PASSWORD
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
@@ -28,18 +38,18 @@ spec:
               name: library-mysql-secret
               key: MYSQL_ROOT_PASSWORD
       volumeMounts:
-        # - name: library-mysql-storage
-        #   mountPath: /var/lib/mysql
-        # - name: mysql-initdb
-        #   mountPath: /docker-entrypoint-initdb.d
+        - name: library-db-storage
+          mountPath: /var/lib/mysql
+        - name: mysql-initdb
+          mountPath: /docker-entrypoint-initdb.d
 
   volumes:
-    # - name: library-mysql-storage
-    #   persistentVolumeClaim:
-    #     claimName: library-mysql-pvc
-    # - name: mysql-initdb
-    #   configMap:
-    #     name: mysql-initdb-config
+    - name: library-db-storage
+      persistentVolumeClaim:
+        claimName: library-mysql-pvc
+    - name: mysql-initdb
+      configMap:
+        name: mysql-initdb-config
         
 
 ---

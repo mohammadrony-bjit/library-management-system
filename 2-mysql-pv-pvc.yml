@@ -4,7 +4,7 @@ metadata:
   name: library-mysql-pv
 spec:
   capacity:
-    storage: 512Mi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
@@ -21,6 +21,6 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 512Mi
+      storage: 1Gi
   volumeName: library-mysql-pv
   volumeMode: Filesystem
