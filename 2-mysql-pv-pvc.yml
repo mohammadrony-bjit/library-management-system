@@ -6,7 +6,7 @@ spec:
   capacity:
     storage: 512Mi
   accessModes:
-    - ReadWriteOnce
+  - ReadWriteOnce
   hostPath:
     path: /root/library-db
   persistentVolumeReclaimPolicy: Retain
@@ -18,7 +18,7 @@ metadata:
   name: library-mysql-pvc
 spec:
   accessModes:
-    - ReadWriteOnce
+  - ReadWriteOnce
   resources:
     requests:
       storage: 512Mi

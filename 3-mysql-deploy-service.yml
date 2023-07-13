@@ -1,17 +1,23 @@
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
-  name: library-mysql-server
-  labels: 
-    app: library-mysql-server
+  name: library-mysql-deployment
 spec:
-  containers:
-    - name: library-mysql-server
-      image: mysql:latest
-      imagePullPolicy: "Always"
-      ports:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: library-mysql-server
+  template:
+    metadata:
+      labels:
+        app: library-mysql-server
+    spec:
+      containers:
+      - name: library-mysql-server
+        image: "mysql:8"
+        ports:
         - containerPort: 3306
-      env:
+        env:
         - name: MYSQL_PORT
           valueFrom:
             configMapKeyRef:
@@ -22,11 +28,6 @@ spec:
             configMapKeyRef:
               name: library-mysql-config
               key: MYSQL_USER
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: library-mysql-secret
-              key: MYSQL_PASSWORD
         - name: MYSQL_DATABASE
           valueFrom:
             configMapKeyRef:
@@ -37,31 +38,30 @@ spec:
             secretKeyRef:
               name: library-mysql-secret
               key: MYSQL_ROOT_PASSWORD
-      volumeMounts:
-        - name: library-db-storage
+        volumeMounts:
+        - name: library-mysql-storage
           mountPath: /var/lib/mysql
         - name: mysql-initdb
           mountPath: /docker-entrypoint-initdb.d
 
-  volumes:
-    - name: library-db-storage
-      persistentVolumeClaim:
-        claimName: library-mysql-pvc
-    - name: mysql-initdb
-      configMap:
-        name: mysql-initdb-config
-        
+      volumes:
+      - name: library-mysql-storage
+        persistentVolumeClaim:
+          claimName: library-mysql-pvc
+      - name: mysql-initdb
+        configMap:
+          name: mysql-initdb-config
+
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mysql-service
+  name: library-mysql-service
 spec:
   selector:
     app: library-mysql-server
   ports:
-    - protocol: TCP
-      port: 3306
-      targetPort: 3306
-      
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
