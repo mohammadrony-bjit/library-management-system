@@ -7,7 +7,7 @@ It allows user to manage Members, Categories, Books and Issueing Books.
 ### Setup project
 #### Setup database and run the project
  - Project requires MySql database. Use Xampp
- - Create a database and name it "sparklmsdb".
+ - Create a database and name it "librarydb".
  - Run the backend from SparkLmsApplication class.
  - After running the backend just hit http://localhost:8080 to access the software.
 

@@ -4,7 +4,8 @@ pipeline {
       pollSCM('H * * * *')
   }
   tools {
-    maven 'MAVEN_3'
+    maven 'Maven_3'
+    git 'Git'
   }
   environment {
     DOCKERHUB_CREDS = 'docker_credentials'
