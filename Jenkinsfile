@@ -58,8 +58,6 @@ pipeline {
     stage('Deploy App in Kubernetes') {
       steps {
         withKubeConfig(credentialsId: 'kubeconfig', serverUrl: '') {
-            echo "${BUILD_NUMBER}"
-
             echo 'Creating config map and secrets'
             sh '/usr/local/bin/kubectl apply -f 1-app-config-and-secret.yml'
 
