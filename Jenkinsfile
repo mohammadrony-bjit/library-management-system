@@ -14,28 +14,28 @@ pipeline {
   }
 
   stages {
-    stage('Git clone') {
+    stage('Git Clone') {
       steps {
         echo 'Pulling repository'
         git branch: 'kubernetes',url: 'https://github.com/mohammadrony-bjit/library-management-system.git'
       }
     }
 
-    stage('Build artifact') {
+    stage('Build Artifact') {
         steps {
             echo 'Constructing artifact'
             sh 'mvn clean package'
         }
     }
 
-    stage('Building image') {
+    stage('Build Container Image') {
       steps {
         script {
           app_image = docker.build("${REGISTRY}/${DOCKER_IMAGE}")
         }
       }
     }
-    stage('Push Docker Image') {
+    stage('Publish Docker Image') {
       steps {
         script {
           docker.withRegistry("https://${REGISTRY}", DOCKERHUB_CREDS) {
@@ -46,7 +46,7 @@ pipeline {
       }
     }
 
-    stage('Remove Unused docker image') {
+    stage('Remove Image from Local') {
       steps {
         script {
           sh "docker rmi ${REGISTRY}/${DOCKER_IMAGE}:latest"
@@ -55,7 +55,7 @@ pipeline {
       }
     }
 
-    stage('Deploy containers') {
+    stage('Deploy App in Kubernetes') {
       steps {
         withKubeConfig(credentialsId: 'kubeconfig', serverUrl: '') {
             echo "${BUILD_NUMBER}"
