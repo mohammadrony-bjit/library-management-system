@@ -17,7 +17,7 @@
   ],
   "ignore": [
     ".*",
-    "/",
+    "index.html",
     "CHANGES",
     "LICENSE",
     "SUPPORTED"
