@@ -1,7 +1,7 @@
 pipeline {
   agent any
   triggers {
-      pollSCM('H * * * *')
+      pollSCM('H/2 * * * *')
   }
   tools {
     maven 'Maven_3'
@@ -67,7 +67,7 @@ pipeline {
             echo 'Creating mysql pod and service'
             sh '/usr/local/bin/kubectl apply -f 3-mysql-deploy-service.yml'
 
-            sleep(30)
+            sleep(10)
             echo 'Creating java app deployments'
             sh 'sed -i "s/\\${BUILD_NUMBER}/${BUILD_NUMBER}/" 4-java-app-deploy.yml'
             sh '/usr/local/bin/kubectl apply -f 4-java-app-deploy.yml'
