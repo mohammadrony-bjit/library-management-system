@@ -3,10 +3,12 @@ pipeline {
   triggers {
       pollSCM('H/2 * * * *')
   }
+
   tools {
     maven 'Maven_3'
     git 'Git'
   }
+
   environment {
     DOCKERHUB_CREDS = 'docker_credentials'
     DOCKER_IMAGE = 'mohammadrony/java-library-app'
@@ -35,6 +37,7 @@ pipeline {
         }
       }
     }
+    
     stage('Publish Docker Image') {
       steps {
         script {
